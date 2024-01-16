@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'io.freefair.lombok' version '8.2.2'
-    id 'org.springframework.boot' version '2.7.17'
+    id 'org.springframework.boot' version '3.2.1'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'jacoco'
     id 'org.sonarqube' version '4.2.1.3168'
@@ -39,8 +39,8 @@ allprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(17))
         }
-        sourceCompatibility = "11"
-        targetCompatibility = "11"
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
     }
 }
 
@@ -78,8 +78,10 @@ dependencies {
     // Spring Doc
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
+    implementation 'jakarta.validation:jakarta.validation-api:3.1.0-M1'
+
     //ssl
-    implementation 'org.apache.httpcomponents:httpclient'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.3'
 
     // observability
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'

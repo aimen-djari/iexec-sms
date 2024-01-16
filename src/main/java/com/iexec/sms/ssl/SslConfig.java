@@ -20,9 +20,8 @@ import com.iexec.commons.poco.tee.TeeFramework;
 import com.iexec.sms.tee.ConditionalOnTeeFramework;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.ssl.SSLContexts;
+import org.apache.hc.core5.ssl.SSLContexts;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
 
 import javax.net.ssl.SSLContext;
 import java.io.File;
@@ -35,7 +34,6 @@ import java.security.cert.CertificateException;
 
 @Slf4j
 @Value
-@ConstructorBinding
 @ConfigurationProperties(prefix = "tee.ssl")
 @ConditionalOnTeeFramework(frameworks = TeeFramework.SCONE)
 public class SslConfig {
@@ -58,7 +56,8 @@ public class SslConfig {
                             (aliases, socket) -> keyAlias)
                     .loadTrustMaterial(null, (chain, authType) -> true)////TODO: Add CAS certificate to truststore
                     .build();
-        } catch (IOException | NoSuchAlgorithmException | KeyStoreException | UnrecoverableKeyException | CertificateException | KeyManagementException e) {
+        } catch (IOException | NoSuchAlgorithmException | KeyStoreException | UnrecoverableKeyException |
+                 CertificateException | KeyManagementException e) {
             log.warn("Failed to create a fresh SSL context", e);
         }
         return null;

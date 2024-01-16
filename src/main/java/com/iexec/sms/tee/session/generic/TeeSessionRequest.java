@@ -17,10 +17,10 @@
 package com.iexec.sms.tee.session.generic;
 
 import com.iexec.commons.poco.task.TaskDescription;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
 
-import javax.validation.constraints.NotNull;
 
 @Value
 @Builder

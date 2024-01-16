@@ -17,10 +17,9 @@
 package com.iexec.sms.tee.challenge;
 
 import com.iexec.sms.utils.EthereumCredentials;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 
 @Data
 @Getter

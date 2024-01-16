@@ -15,8 +15,8 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = "11"
-    targetCompatibility = "11"
+    sourceCompatibility = "17"
+    targetCompatibility = "17"
     withJavadocJar()
     withSourcesJar()
 }
@@ -31,7 +31,7 @@ jacocoTestReport {
         xml.required = true
     }
 }
-tasks.test.finalizedBy    tasks.jacocoTestReport
+tasks.test.finalizedBy tasks.jacocoTestReport
 
 publishing {
     publications {
@@ -45,7 +45,7 @@ publishing {
                 username nexusUser
                 password nexusPassword
             }
-            url = project.hasProperty("nexusUrl")? project.nexusUrl: ''
+            url = project.hasProperty("nexusUrl") ? project.nexusUrl : ''
         }
     }
 }
