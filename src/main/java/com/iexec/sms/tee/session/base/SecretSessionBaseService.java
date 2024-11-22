@@ -60,6 +60,7 @@ public class SecretSessionBaseService {
     public static final String PRE_COMPUTE_MRENCLAVE = "PRE_COMPUTE_MRENCLAVE";
     static final String IEXEC_PRE_COMPUTE_OUT = "IEXEC_PRE_COMPUTE_OUT";
     static final String IEXEC_DATASET_KEY = "IEXEC_DATASET_KEY";
+    static final String IEXEC_DATASET_KEY_PREFIX = "IEXEC_DATASET_KEY_";
     // Compute
     public static final String APP_MRENCLAVE = "APP_MRENCLAVE";
     // PostCompute
@@ -137,16 +138,27 @@ public class SecretSessionBaseService {
 
         List<String> trustedEnv = new ArrayList<>();
         if (taskDescription.containsDataset()) {
-            String datasetKey = web3SecretService
-                    .getDecryptedValue(taskDescription.getDatasetAddress())
-                    .orElseThrow(() -> new TeeSessionGenerationException(
-                            PRE_COMPUTE_GET_DATASET_SECRET_FAILED,
-                            "Empty dataset secret - taskId: " + taskId));
-            tokens.put(IEXEC_DATASET_KEY, datasetKey);
-            trustedEnv.addAll(List.of(
-                    IexecEnvUtils.IEXEC_DATASET_URL,
-                    IexecEnvUtils.IEXEC_DATASET_FILENAME,
-                    IexecEnvUtils.IEXEC_DATASET_CHECKSUM));
+        	trustedEnv.add(IexecEnvUtils.IEXEC_DATASET_NUMBER);
+        	trustedEnv.add(IexecEnvUtils.IEXEC_DATASET_URL);
+        	trustedEnv.add(IexecEnvUtils.IEXEC_DATASET_FILENAME);
+        	trustedEnv.add(IexecEnvUtils.IEXEC_DATASET_CHECKSUM);
+        	
+        	for (int i=1; i<= taskDescription.getDatasetAddresses().size(); i++) {
+        		String datasetKey = web3SecretService
+                        .getDecryptedValue(taskDescription.getDatasetAddresses().get(i-1))
+                        .orElseThrow(() -> new TeeSessionGenerationException(
+                                PRE_COMPUTE_GET_DATASET_SECRET_FAILED,
+                                "Empty dataset secret - taskId: " + taskId));
+                tokens.put(IEXEC_DATASET_KEY_PREFIX + i, datasetKey);
+                if (i==1) {
+                	tokens.put(IEXEC_DATASET_KEY, datasetKey);
+                }
+                trustedEnv.addAll(List.of(
+                        IexecEnvUtils.IEXEC_DATASET_URL_PREFIX + i,
+                        IexecEnvUtils.IEXEC_DATASET_FILENAME_PREFIX + i,
+                        IexecEnvUtils.IEXEC_DATASET_CHECKSUM_PREFIX + i));
+        	}
+            
         } else {
             log.info("No dataset key needed for this task [taskId:{}]", taskId);
         }

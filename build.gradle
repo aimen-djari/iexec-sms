@@ -19,7 +19,7 @@ if (!project.hasProperty('gitBranch')) {
 allprojects {
     group = 'com.iexec.sms'
     if (gitBranch != 'main' && gitBranch != 'master' && !(gitBranch ==~ '(release|hotfix|support)/.*')) {
-        version += '-NEXT-SNAPSHOT'
+        //version += '-NEXT-SNAPSHOT'
     }
     repositories {
         mavenLocal()
@@ -62,8 +62,11 @@ configurations {
 
 dependencies {
     // iexec
-    implementation "com.iexec.commons:iexec-commons-poco:$iexecCommonsPocoVersion"
-    implementation "com.iexec.common:iexec-common:$iexecCommonVersion"
+    implementation files('iexec-commons-poco/iexec-commons-poco-3.2.0-all.jar')
+    implementation files('iexec-common/iexec-common-8.3.1-all.jar')
+    
+    //implementation "com.iexec.commons:iexec-commons-poco:$iexecCommonsPocoVersion"
+    //implementation "com.iexec.common:iexec-common:$iexecCommonVersion"
     implementation project(':iexec-sms-library')
 
     // spring
@@ -105,6 +108,7 @@ tasks.named("bootJar") {
         attributes("Implementation-Title": "iExec Secret Management Service",
                 "Implementation-Version": project.version)
     }
+    duplicatesStrategy = 'exclude'
 }
 
 test {

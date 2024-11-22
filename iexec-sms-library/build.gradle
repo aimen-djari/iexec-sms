@@ -1,13 +1,16 @@
 plugins {
     id 'java-library'
     id 'io.freefair.lombok'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'jacoco'
     id 'maven-publish'
 }
 
 dependencies {
-    implementation "com.iexec.commons:iexec-commons-poco:$iexecCommonsPocoVersion"
-    implementation "com.iexec.common:iexec-common:$iexecCommonVersion"
+    //implementation "com.iexec.commons:iexec-commons-poco:$iexecCommonsPocoVersion"
+    //implementation "com.iexec.common:iexec-common:$iexecCommonVersion"
+    implementation files('iexec-commons-poco/iexec-commons-poco-3.2.0-all.jar')
+    implementation files('iexec-common/iexec-common-8.3.1-all.jar')
     testImplementation "org.assertj:assertj-core:3.22.0"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -20,6 +23,16 @@ java {
     withJavadocJar()
     withSourcesJar()
 }
+
+shadowJar {
+    // classifier to produce 2 identified jar files
+    archiveClassifier.set('all')
+    // include source code in the jar
+    from sourceSets.main.allSource
+    // avoid duplicate application.properties import from jar and sources
+    duplicatesStrategy = 'exclude'
+}
+build.dependsOn(shadowJar)
 
 test {
     useJUnitPlatform()

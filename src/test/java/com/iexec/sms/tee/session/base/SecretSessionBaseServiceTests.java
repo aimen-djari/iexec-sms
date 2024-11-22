@@ -169,7 +169,7 @@ class SecretSessionBaseServiceTests {
         assertEquals("Task description must not be null", exception.getMessage());
     }
     // endregion
-
+    
     // region getPreComputeTokens
     @Test
     void shouldGetPreComputeTokens() throws Exception {
@@ -185,10 +185,11 @@ class SecretSessionBaseServiceTests {
         expectedTokens.put("IEXEC_TASK_ID", TASK_ID);
         expectedTokens.put("IEXEC_PRE_COMPUTE_OUT", "/iexec_in");
         expectedTokens.put("IS_DATASET_REQUIRED", true);
-        expectedTokens.put("IEXEC_DATASET_KEY", DATASET_KEY);
-        expectedTokens.put("IEXEC_DATASET_URL", DATASET_URL);
-        expectedTokens.put("IEXEC_DATASET_FILENAME", DATASET_ADDRESS);
-        expectedTokens.put("IEXEC_DATASET_CHECKSUM", DATASET_CHECKSUM);
+        expectedTokens.put("IEXEC_DATASET_NUMBER", "1");
+        expectedTokens.put("IEXEC_DATASET_KEY_1", DATASET_KEY);
+        expectedTokens.put("IEXEC_DATASET_URL_1", DATASET_URL);
+        expectedTokens.put("IEXEC_DATASET_FILENAME_1", DATASET_ADDRESS);
+        expectedTokens.put("IEXEC_DATASET_CHECKSUM_1", DATASET_CHECKSUM);
         expectedTokens.put("IEXEC_INPUT_FILES_FOLDER", "/iexec_in");
         expectedTokens.put("IEXEC_INPUT_FILES_NUMBER", "2");
         expectedTokens.put("IEXEC_INPUT_FILE_URL_1", INPUT_FILE_URL_1);
@@ -242,8 +243,9 @@ class SecretSessionBaseServiceTests {
         expectedTokens.put("IEXEC_TASK_ID", TASK_ID);
         expectedTokens.put("IEXEC_IN", "/iexec_in");
         expectedTokens.put("IEXEC_OUT", "/iexec_out");
-        expectedTokens.put("IEXEC_DATASET_ADDRESS", DATASET_ADDRESS);
-        expectedTokens.put("IEXEC_DATASET_FILENAME", DATASET_ADDRESS);
+        expectedTokens.put("IEXEC_DATASET_NUMBER", "1");
+        expectedTokens.put("IEXEC_DATASET_ADDRESS_1", DATASET_ADDRESS);
+        expectedTokens.put("IEXEC_DATASET_FILENAME_1", DATASET_ADDRESS);
         expectedTokens.put("IEXEC_BOT_SIZE", "1");
         expectedTokens.put("IEXEC_BOT_FIRST_INDEX", "0");
         expectedTokens.put("IEXEC_BOT_TASK_INDEX", "0");
@@ -274,10 +276,10 @@ class SecretSessionBaseServiceTests {
                 .appUri(APP_URI)
                 .appAddress(appAddress)
                 .appEnclaveConfiguration(enclaveConfig)
-                .datasetAddress(DATASET_ADDRESS)
-                .datasetUri(DATASET_URL)
-                .datasetName(DATASET_NAME)
-                .datasetChecksum(DATASET_CHECKSUM)
+                .datasetAddresses(List.of(DATASET_ADDRESS))
+                .datasetUris(List.of(DATASET_URL))
+                .datasetNames(List.of(DATASET_NAME))
+                .datasetChecksums(List.of(DATASET_CHECKSUM))
                 .requester(requesterAddress)
                 .cmd(ARGS)
                 .inputFiles(List.of(INPUT_FILE_URL_1, INPUT_FILE_URL_2))
@@ -305,8 +307,9 @@ class SecretSessionBaseServiceTests {
         expectedTokens.put("IEXEC_TASK_ID", TASK_ID);
         expectedTokens.put("IEXEC_IN", "/iexec_in");
         expectedTokens.put("IEXEC_OUT", "/iexec_out");
-        expectedTokens.put("IEXEC_DATASET_ADDRESS", DATASET_ADDRESS);
-        expectedTokens.put("IEXEC_DATASET_FILENAME", DATASET_ADDRESS);
+        expectedTokens.put("IEXEC_DATASET_NUMBER", "1");
+        expectedTokens.put("IEXEC_DATASET_ADDRESS_1", DATASET_ADDRESS);
+        expectedTokens.put("IEXEC_DATASET_FILENAME_1", DATASET_ADDRESS);
         expectedTokens.put("IEXEC_BOT_SIZE", "1");
         expectedTokens.put("IEXEC_BOT_FIRST_INDEX", "0");
         expectedTokens.put("IEXEC_BOT_TASK_INDEX", "0");
