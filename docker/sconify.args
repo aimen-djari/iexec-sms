@@ -4,7 +4,7 @@
 --from=${IMG_FROM} \
 --to=${IMG_TO} \
 --binary=/opt/java/openjdk/bin/java \
---heap="8G" \
+--heap="4G" \
 --stack="8M" \
 --binary-fs \
 --fs-dir=/app \

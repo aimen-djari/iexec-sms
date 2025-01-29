@@ -24,11 +24,14 @@ import com.iexec.sms.tee.session.generic.TeeSessionGenerationException;
 import com.iexec.sms.tee.session.generic.TeeSessionHandler;
 import com.iexec.sms.tee.session.generic.TeeSessionRequest;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import static com.iexec.sms.api.TeeSessionGenerationError.GET_TASK_DESCRIPTION_FAILED;
 import static com.iexec.sms.api.TeeSessionGenerationError.SECURE_SESSION_NO_TEE_PROVIDER;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class TeeSessionService {
 
@@ -48,19 +51,22 @@ public class TeeSessionService {
             String workerAddress,
             String teeChallenge) throws TeeSessionGenerationException {
         String sessionId = createSessionId(taskId);
+        log.info("Getting task description [taskId:{}]", taskId);
         TaskDescription taskDescription = iexecHubService.getTaskDescription(taskId);
         if (taskDescription == null) {
             throw new TeeSessionGenerationException(
                     GET_TASK_DESCRIPTION_FAILED,
                     String.format("Failed to get task description [taskId:%s]", taskId));
         }
+
+        log.info("Got task description [taskId:{}]", taskId);
         TeeSessionRequest request = TeeSessionRequest.builder()
                 .sessionId(sessionId)
                 .taskDescription(taskDescription)
                 .workerAddress(workerAddress)
                 .enclaveChallenge(teeChallenge)
                 .build();
-
+        log.info("Prepared tee session request");
         final TeeFramework teeFramework = taskDescription.getTeeFramework();
         if (teeFramework == null) {
             throw new TeeSessionGenerationException(
@@ -76,6 +82,12 @@ public class TeeSessionService {
     private String createSessionId(String taskId) {
         String randomString = RandomStringUtils.randomAlphanumeric(10);
         return String.format("%s0000%s", randomString, taskId);
+    }
+
+    @Async
+    public void generateAndStoreTaskDescription(String taskId){
+        log.info("Generating task description [taskId:{}]", taskId);
+        iexecHubService.getTaskDescriptionCustom(taskId, 1000L, 30);
     }
 
 }

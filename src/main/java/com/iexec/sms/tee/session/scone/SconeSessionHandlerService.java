@@ -55,7 +55,9 @@ public class SconeSessionHandlerService implements TeeSessionHandler {
     @Override
     public String buildAndPostSession(TeeSessionRequest request)
             throws TeeSessionGenerationException {
+        log.info("Generating tee session");
         SconeSession session = sessionService.generateSession(request);
+        log.info("Tee session generated");
         ResponseEntity<String> postSession = apiClient.postSession(session.toString());
 
         if (postSession == null) {

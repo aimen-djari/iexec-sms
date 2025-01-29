@@ -106,6 +106,11 @@ public class TeeController {
     public ResponseEntity<String> generateTeeChallenge(@PathVariable String chainTaskId) {
         Optional<TeeChallenge> executionChallenge =
                 teeChallengeService.getOrCreate(chainTaskId, false);
+
+        // Parallelize task description generation with core
+        executionChallenge.ifPresent(challenge -> teeSessionService.generateAndStoreTaskDescription(chainTaskId));
+        
+        log.info("return TEE challenge");
         return executionChallenge
                 .map(teeChallenge -> ResponseEntity
                         .ok(teeChallenge.getCredentials().getAddress()))
@@ -127,6 +132,7 @@ public class TeeController {
     public ResponseEntity<ApiResponseBody<TeeSessionGenerationResponse, TeeSessionGenerationError>> generateTeeSession(
             @RequestHeader("Authorization") String authorization,
             @RequestBody WorkerpoolAuthorization workerpoolAuthorization) {
+        log.info("TEE session request start");
         String workerAddress = workerpoolAuthorization.getWorkerWallet();
         String challenge = authorizationService.getChallengeForWorker(workerpoolAuthorization);
         if (!authorizationService.isSignedByHimself(challenge, authorization, workerAddress)) {

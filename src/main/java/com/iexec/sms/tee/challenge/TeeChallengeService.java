@@ -39,6 +39,8 @@ public class TeeChallengeService {
     }
 
     public Optional<TeeChallenge> getOrCreate(String taskId, boolean shouldDecryptKeys) {
+        log.info("Getting tee challenge [chainTaskId:{}]",
+                    taskId);
         // if existing returns from the db
         Optional<TeeChallenge> optionalTeeChallenge = teeChallengeRepository.findByTaskId(taskId);
         if (optionalTeeChallenge.isPresent()) {
@@ -47,6 +49,8 @@ public class TeeChallengeService {
             }
             return optionalTeeChallenge;
         }
+        log.info("Creating tee challenge [chainTaskId:{}]",
+                    taskId);
 
         // otherwise create it
         try {
